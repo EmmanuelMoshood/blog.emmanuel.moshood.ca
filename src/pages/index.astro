@@ -1,0 +1,19 @@
+---
+import PostGrid from '../components/PostGrid.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPosts } from '../lib/posts';
+
+const posts = (await getPosts()).slice(0, 5);
+---
+
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <p class="intro">
+    Hi, I'm Emmanuel. I write about the work of getting software and ML models into production — CI/CD, Kubernetes,
+    infrastructure as code, MLOps — and what I'm learning along the way. <a href="/about/">More about me</a>
+  </p>
+
+  <h1 class="section-label">Latest articles</h1>
+  {posts.length > 0 ? <PostGrid posts={posts} featureFirst /> : <p>No posts yet — check back soon.</p>}
+  {posts.length > 0 && <p class="more"><a href="/blog/">All articles →</a></p>}
+</BaseLayout>

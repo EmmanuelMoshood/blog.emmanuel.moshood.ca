@@ -1,0 +1,12 @@
+---
+import PostGrid from '../../components/PostGrid.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+---
+
+<BaseLayout title="Articles" description="Every post on DevOps, platform engineering, MLOps and my career, newest first.">
+  <h1 class="section-label">All articles</h1>
+  <PostGrid posts={posts} />
+</BaseLayout>

@@ -1,0 +1,65 @@
+---
+import '../styles/global.css';
+import { AUTHOR, SITE_TITLE } from '../consts';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute URL or site-relative path, e.g. /images/uploads/foo.png */
+  image?: string | undefined;
+  type?: 'website' | 'article';
+  publishedTime?: Date | undefined;
+  modifiedTime?: Date | undefined;
+  tags?: string[] | undefined;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  tags = [],
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = title === SITE_TITLE ? title : `${title} · ${SITE_TITLE}`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = image ? new URL(image, Astro.site) : undefined;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="color-scheme" content="light" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={new URL('rss.xml', Astro.site)} />
+<meta name="generator" content={Astro.generator} />
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={AUTHOR} />
+<link rel="canonical" href={canonicalURL} />
+{noindex && <meta name="robots" content="noindex" />}
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:locale" content="en_CA" />
+{imageURL && <meta property="og:image" content={imageURL} />}
+{publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
+{type === 'article' && <meta property="article:author" content={AUTHOR} />}
+{type === 'article' && tags.map((tag) => <meta property="article:tag" content={tag} />)}
+
+<!-- Twitter -->
+<meta name="twitter:card" content={imageURL ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{imageURL && <meta name="twitter:image" content={imageURL} />}

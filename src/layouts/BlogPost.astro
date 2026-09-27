@@ -1,0 +1,52 @@
+---
+import FormattedDate from '../components/FormattedDate.astro';
+import TagList from '../components/TagList.astro';
+import type { Post } from '../lib/posts';
+import { readingTime } from '../lib/posts';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, draft } = post.data;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={heroImage}
+  type="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  tags={tags}
+  noindex={draft}
+>
+  <article class="post">
+    {heroImage && <img class="post__hero" src={heroImage} alt="" width="1200" height="630" />}
+    <div class="post__inner">
+      <header class="post__header">
+        {draft && <p class="badge">Draft — not published in production</p>}
+        <p class="card__meta">
+          <FormattedDate date={pubDate} />
+          <span>{readingTime(post.body)}</span>
+        </p>
+        <h1>{title}</h1>
+        {
+          updatedDate && (
+            <p class="meta">
+              Updated <FormattedDate date={updatedDate} />
+            </p>
+          )
+        }
+      </header>
+      <div class="prose">
+        <slot />
+      </div>
+      <footer class="post__footer">
+        <TagList tags={tags} />
+        <a href="/blog/">← All articles</a>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>

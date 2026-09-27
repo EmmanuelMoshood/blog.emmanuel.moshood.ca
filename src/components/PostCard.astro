@@ -1,0 +1,49 @@
+---
+import type { Post } from '../lib/posts';
+import { readingTime, tagSlug } from '../lib/posts';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+  post: Post;
+  featured?: boolean;
+}
+const { post, featured = false } = Astro.props;
+const { title, description, pubDate, heroImage, tags, draft } = post.data;
+const href = `/blog/${post.id}/`;
+---
+
+<article class:list={['card', { 'card--featured': featured }]}>
+  <div class="card__media">
+    {
+      heroImage ? (
+        <img src={heroImage} alt="" loading={featured ? 'eager' : 'lazy'} width="1200" height="630" />
+      ) : (
+        <span class="card__placeholder" aria-hidden="true">
+          {tags[0] ?? 'Notes'}
+        </span>
+      )
+    }
+  </div>
+  <div class="card__body">
+    <p class="card__meta">
+      <FormattedDate date={pubDate} />
+      <span>{readingTime(post.body)}</span>
+    </p>
+    <h2 class="card__title">
+      <a href={href}>{title}</a>
+      {draft && <span class="badge">Draft</span>}
+    </h2>
+    <p class="card__excerpt">{description}</p>
+    {
+      tags.length > 0 && (
+        <ul class="card__tags">
+          {tags.slice(0, 3).map((tag) => (
+            <li>
+              <a href={`/tags/${tagSlug(tag)}/`}>#{tag}</a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</article>

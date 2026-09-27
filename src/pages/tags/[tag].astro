@@ -1,0 +1,31 @@
+---
+import PostGrid from '../../components/PostGrid.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, tagSlug, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const byTag = new Map<string, { label: string; posts: Post[] }>();
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      const slug = tagSlug(tag);
+      const entry = byTag.get(slug) ?? { label: tag, posts: [] };
+      entry.posts.push(post);
+      byTag.set(slug, entry);
+    }
+  }
+  return [...byTag].map(([tag, { label, posts }]) => ({ params: { tag }, props: { label, posts } }));
+}
+
+interface Props {
+  label: string;
+  posts: Post[];
+}
+const { label, posts } = Astro.props;
+---
+
+<BaseLayout title={`Posts tagged “${label}”`} description={`Posts about ${label}.`}>
+  <h1 class="section-label">Tagged <span class="accent">#{label}</span></h1>
+  <p class="meta page-meta">{posts.length} {posts.length === 1 ? 'post' : 'posts'} · <a href="/blog/">all posts</a></p>
+  <PostGrid posts={posts} />
+</BaseLayout>

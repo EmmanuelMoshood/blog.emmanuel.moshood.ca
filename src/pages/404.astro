@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="That page doesn't exist." noindex>
+  <section class="page not-found">
+    <p class="not-found__code">404</p>
+    <h1>Page not found</h1>
+    <p>That URL returned a 404 — no amount of retries will fix this one.</p>
+    <p><a href="/">Go home</a> or <a href="/blog/">browse all posts</a>.</p>
+  </section>
+</BaseLayout>

@@ -1,0 +1,25 @@
+---
+import type { Post } from '../lib/posts';
+import PostCard from './PostCard.astro';
+
+interface Props {
+  posts: Post[];
+  /** Show the first post as a large featured card. */
+  featureFirst?: boolean;
+}
+const { posts, featureFirst = false } = Astro.props;
+const [first, ...rest] = posts;
+const featured = featureFirst ? first : undefined;
+const grid = featureFirst ? rest : posts;
+---
+
+{featured && <PostCard post={featured} featured />}
+{
+  grid.length > 0 && (
+    <div class="grid">
+      {grid.map((post) => (
+        <PostCard post={post} />
+      ))}
+    </div>
+  )
+}
