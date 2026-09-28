@@ -1,0 +1,16 @@
+# Local environment for `npx wrangler pages dev` (Pages Functions in ./functions).
+# Copy to .dev.vars (gitignored) and fill in real values. Never commit .dev.vars.
+#
+# Use a separate GitHub OAuth App for local testing, with its
+# "Authorization callback URL" set to http://localhost:8788/api/callback
+
+# GitHub OAuth App → "Client ID"
+GITHUB_CLIENT_ID=your-github-oauth-client-id
+
+# GitHub OAuth App → "Generate a new client secret" (secret: set with
+# `wrangler pages secret put` or as an encrypted variable in production)
+GITHUB_CLIENT_SECRET=your-github-oauth-client-secret
+
+# Optional. Defaults to "public_repo" (wrangler.toml sets it for deploys).
+# Use "repo" if the GitHub repository is private.
+GITHUB_SCOPE=public_repo

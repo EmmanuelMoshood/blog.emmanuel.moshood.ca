@@ -1,0 +1,34 @@
+# Catch broken posts (bad frontmatter, schema errors, type errors) before merge.
+# Deploys are handled by Cloudflare Pages, not by this workflow.
+name: Build
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Type-check and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # `npm run build` = `astro check && astro build`. Drafts are excluded from
+      # the output, but their frontmatter is still validated against the schema.
+      - run: npm run build

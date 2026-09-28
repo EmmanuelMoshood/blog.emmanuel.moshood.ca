@@ -1,0 +1,16 @@
+# Cloudflare Pages configuration: static Astro build + Pages Functions in ./functions.
+# https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+#
+# With this file present, non-secret settings are managed here, not in the dashboard.
+# Secrets are NEVER stored here. Set them per environment:
+#   npx wrangler pages secret put GITHUB_CLIENT_ID     --project-name blog-emmanuel-moshood
+#   npx wrangler pages secret put GITHUB_CLIENT_SECRET --project-name blog-emmanuel-moshood
+# For `wrangler pages dev`, put them in .dev.vars instead (gitignored; see .dev.vars.example).
+
+name = "blog-emmanuel-moshood"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-09-01"
+
+[vars]
+# "public_repo" works for a public repo. Use "repo" if the repo is private.
+GITHUB_SCOPE = "public_repo"

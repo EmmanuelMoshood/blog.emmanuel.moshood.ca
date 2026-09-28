@@ -1,0 +1,54 @@
+# Decap CMS configuration — https://decapcms.org/docs/configuration-options/
+backend:
+  name: github
+  repo: EmmanuelMoshood/blog.emmanuel.moshood.ca
+  branch: main
+  base_url: https://blog.emmanuel.moshood.ca
+  auth_endpoint: api/auth
+
+# Lets `npx decap-server` (port 8081) stand in for GitHub when the CMS runs
+# on localhost. Ignored on the live site. See README → "Editing with Decap CMS".
+local_backend: true
+
+# Drafts → In review → Ready, as branches + pull requests on GitHub.
+publish_mode: editorial_workflow
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+site_url: https://blog.emmanuel.moshood.ca
+display_url: https://blog.emmanuel.moshood.ca
+
+collections:
+  - name: blog
+    label: Blog posts
+    label_singular: Blog post
+    folder: src/content/blog
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    preview_path: blog/{{slug}}/
+    summary: '{{title}} — {{pubDate}}'
+    # Keep these in sync with the Zod schema in src/content.config.ts.
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: text, hint: 'One or two sentences. Used in listings, RSS and SEO.' }
+      # Date-only (YYYY-MM-DD): the site renders dates in UTC, so storing a
+      # local time with an offset could show the post on the wrong day.
+      - label: Publish date
+        name: pubDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        default: '{{now}}'
+      - label: Updated date
+        name: updatedDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        required: false
+      - { label: Tags, name: tags, widget: list, default: [], required: false, hint: 'Comma-separated, e.g. kubernetes, mlops' }
+      - { label: Hero image, name: heroImage, widget: image, required: false, choose_url: true, hint: 'PNG/JPG, ~1200×630. Also used as the social preview image.' }
+      - { label: Draft, name: draft, widget: boolean, default: false, required: false, hint: 'Drafts are hidden from the production site.' }
+      - { label: Body, name: body, widget: markdown }
