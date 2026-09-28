@@ -1,6 +1,8 @@
 // @ts-check
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
+import { satteri } from '@astrojs/markdown-satteri';
+import figures from './src/lib/figures.mjs';
 
 /**
  * Static hosts serve public/admin/index.html at /admin/, but the Astro dev
@@ -24,6 +26,9 @@ export default defineConfig({
   trailingSlash: 'ignore',
   integrations: [sitemap()],
   markdown: {
+    // Sätteri is Astro 7's default Markdown processor. The figures plugin turns
+    // standalone images into <figure> with optional captions (see src/lib/figures.mjs).
+    processor: satteri({ hastPlugins: [figures] }),
     shikiConfig: {
       theme: 'github-light',
       wrap: false,

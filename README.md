@@ -72,11 +72,24 @@ Cards use `heroImage` as their cover. Posts without one get a neutral placeholde
    ```
 
 3. Write Markdown below it. Fenced code blocks get syntax highlighting (Shiki) (`github-light`): ` ```yaml `, ` ```bash `, ` ```ts `, ` ```python `, and so on.
-4. **Images:** put files in `public/images/uploads/` and reference them with an absolute path:
+4. **Images:** put files in `public/images/uploads/` and reference them with an absolute path. Use as many as you
+   like, anywhere in the post. An image on its own line becomes a figure. To add a caption underneath, use either
+   method:
 
    ```md
-   ![Alt text describing the image](/images/uploads/my-diagram.png)
+   ![Alt text describing the image](/images/uploads/my-diagram.png "Caption from the image title")
+
+   ![Screenshot of the gate UI](/images/uploads/gate-lite.png)
+   *Captions written like this can contain `code`, **bold** and [links](https://example.com).*
    ```
+
+   - **Title caption:** the text in quotes after the path. In Decap, it's the **Title** field of the editor's image
+     button.
+   - **Italic caption:** an italic line directly below the image, on the next line or after a blank line. Use this
+     one when the caption needs Markdown formatting.
+
+   Leave both out for an image with no caption. An image inside a sentence stays inline. Every image lazy-loads.
+   The conversion lives in `src/lib/figures.mjs`, a plugin for Sätteri (Astro 7's Markdown processor).
 
    Files in `public/` are copied as-is and are not optimized, so resize and compress them before you commit.
 5. **Drafts:** `draft: true` posts appear in `npm run dev` with a "Draft" badge. Production builds leave them out of

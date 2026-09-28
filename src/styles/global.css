@@ -512,6 +512,26 @@ main {
   margin: 1.5rem auto;
   border-radius: var(--radius);
 }
+
+/* Images on their own line become figures, optionally with a caption. */
+.prose figure {
+  margin: 2rem 0;
+}
+.prose figure img {
+  margin: 0 auto;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.08), 0 4px 16px rgb(0 0 0 / 0.08);
+}
+.prose figcaption {
+  margin: 0.75rem auto 0;
+  max-width: 36rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+.prose figcaption em {
+  font-style: normal; /* the caption is already italic, so *emphasis* flips back */
+}
 .prose blockquote {
   margin-inline: 0;
   padding-left: 1rem;
